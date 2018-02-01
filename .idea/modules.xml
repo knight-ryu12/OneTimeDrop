@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/OneTimeDrop.iml" filepath="$PROJECT_DIR$/.idea/modules/OneTimeDrop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/OneTimeDrop_main.iml" filepath="$PROJECT_DIR$/.idea/modules/OneTimeDrop_main.iml" group="OneTimeDrop" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/OneTimeDrop_test.iml" filepath="$PROJECT_DIR$/.idea/modules/OneTimeDrop_test.iml" group="OneTimeDrop" />
+    </modules>
+  </component>
+</project>
