@@ -13,7 +13,7 @@ import java.util.Map;
 public class Config {
 
     private String JdbcUrl;
-
+    private String directory;
     public static final Config CONFIG;
 
     static {
@@ -30,7 +30,9 @@ public class Config {
         CONFIG = c;
     }
 
-    public Config(File cred,File configFile) {
+
+
+    public Config(File cred, File configFile) {
         try {
             Yaml yaml = new Yaml();
             String credFileStr = FileUtils.readFileToString(cred,"UTF-8");
@@ -74,5 +76,8 @@ public class Config {
 
     public String getJdbcUrl() {
         return JdbcUrl;
+    }
+    public String getDirectory() {
+        return directory;
     }
 }

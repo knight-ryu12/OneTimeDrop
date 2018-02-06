@@ -60,5 +60,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.lz4/lz4-java
     compile group: 'org.lz4', name: 'lz4-java', version: '1.4.1'
 
+    // https://mvnrepository.com/artifact/org.anarres.lzo/lzo-hadoop
+    compile group: 'org.anarres.lzo', name: 'lzo-hadoop', version: '1.0.5'
+    // https://mvnrepository.com/artifact/org.anarres.lzo/lzo-core
+    compile group: 'org.anarres.lzo', name: 'lzo-core', version: '1.0.5'
+    // https://mvnrepository.com/artifact/org.anarres.lzo/lzo-commons
+    compile group: 'org.anarres.lzo', name: 'lzo-commons', version: '1.0.5'
 
 }

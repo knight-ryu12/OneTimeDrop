@@ -9,6 +9,7 @@ public class start {
     public static HikariDataSource hds;
     private static databaseHandler dh;
     public static void main(String[] args) {
+        //Config.CONFI
         initDatabeConnection();
         dh = new databaseHandler();
         ignite.ignite();

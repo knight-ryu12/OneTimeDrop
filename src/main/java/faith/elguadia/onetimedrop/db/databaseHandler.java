@@ -36,6 +36,7 @@ public class databaseHandler {
                             "filehash VARCHAR(255) NOT NULL," +
                             "filelength INTEGER NOT NULL," +
                             "filefinger VARCHAR(16) NOT NULL," +
+                            //"filecompmethod VARCHAR(16) NOT NULL," +
                             "created TIMESTAMP," +
                             "modified TIMESTAMP" +
                             ")"
@@ -79,6 +80,7 @@ public class databaseHandler {
                 d.put("filehash", rs.getString("filehash"));
                 d.put("filelength", rs.getString("filelength"));
                 d.put("filefinger", rs.getString("filefinger"));
+                //d.put("filecompmethod", rs.getString("filecompmethod"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

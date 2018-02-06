@@ -1,6 +1,7 @@
 package faith.elguadia.onetimedrop;
 
 
+import faith.elguadia.onetimedrop.compress.selectCompress;
 import faith.elguadia.onetimedrop.db.databaseHandler;
 import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4Factory;
@@ -34,7 +35,7 @@ public class ignite {
 
     static {
         try {
-            logger.info(lz4.toString());
+            logger.info("LZ4 Compressor Initialized. Return:"+lz4.toString());
             md = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -69,17 +70,18 @@ public class ignite {
 
                 byte[] data = new byte[(int) filePart.getSize()];
                 logger.info(String.format("FileSizeArray:%d",data.length));
-
                 IOUtils.readFully(filePart.getInputStream(),data); //Copy.
+                byte[] compressed = selectCompress.compressLZ4(data);
                 //filePart.getInputStream().close(); // No need.
-                logger.info(String.format("FileSizeArray:%d",data.length));
+                /*logger.info(String.format("FileSizeArray:%d",data.length));
                 LZ4Compressor lz4Compressor = lz4.fastCompressor();
                 int maxCompressedLength = lz4Compressor.maxCompressedLength(data.length);
                 logger.info(String.format("Try to compress> Length:%d maxCompressedLength:%d",data.length,maxCompressedLength));
                 byte[] compressed = new byte[maxCompressedLength];
                 int compressedLength = lz4Compressor.compress(data,0,data.length,compressed,0,maxCompressedLength);
                 logger.info(String.format("Compressed> newByteArrayLen:%d newLen:%d",compressed.length,compressedLength));
-
+                */
+                // I think I am not a real person, rather than work-alone mind AI.
                 //try(ByteArrayInputStream bais = new ByteArrayInputStream(data); FileOutputStream fos = new FileOutputStream(f))
 
 
@@ -125,20 +127,17 @@ public class ignite {
                 /*try(FileInputStream fis = new FileInputStream(f)){
                     IOUtils.copy(fis,response.raw().getWriter(), Charset.defaultCharset());
                 }*/ // seems it doesn't support and yeah
-                byte[] data = null;
-                try {
-                    data = Files.readAllBytes(p); // This is COMPRESSED.
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 // Decompress
                 int decompLength = Integer.parseInt(m.getOrDefault("filelength",""));
+                byte[] restored = selectCompress.decompressLZ4(f,decompLength);
+                /*
+
                 LZ4FastDecompressor decompressor = lz4.fastDecompressor();
                 byte[] restored = new byte[decompLength];
                 int compressedLength = decompressor.decompress(data,0,restored,0,decompLength);
                 logger.info(String.format("CompressedLength:%d",compressedLength));
                 //Decompressed.
-
+                */
 
                 //md.digest(data);
                 String targethash = m.getOrDefault("filehash","");
@@ -153,7 +152,7 @@ public class ignite {
                 response.header("Content-Length",m.getOrDefault("filelength",""));
                 response.header("Content-Disposition","attachment; filename=\""+fn+"\"");
                 try {
-                    assert data != null;
+                    assert restored != null;
                     response.raw().getOutputStream().write(restored);
                 } catch (Exception e) {
                     return null;
