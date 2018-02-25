@@ -2,6 +2,7 @@ package faith.elguadia.onetimedrop;
 
 
 import faith.elguadia.onetimedrop.compress.selectCompress;
+import faith.elguadia.onetimedrop.config.Config;
 import faith.elguadia.onetimedrop.db.databaseHandler;
 import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4Factory;
@@ -63,7 +64,7 @@ public class ignite {
                 }
 
                 String filename = filePart.getSubmittedFileName();
-                File f = new File(filename);
+                File f = new File(Config.CONFIG.getDirectory()+filename);
                 Path ft = f.toPath();
 
                 logger.info(String.format("Filesize:%d",filePart.getSize()));
@@ -116,7 +117,7 @@ public class ignite {
                     response.header("Pragma","no-cache");
                     return "{\"ok\":\"false\",\"errorcode\":3000}\n"; //Input Error (300-0: filename is not returned (Maybe no entry?))
                 }
-                File f = new File(s);
+                File f = new File(Config.CONFIG.getDirectory()+s);
                 Path p = f.toPath();
                 if(!f.exists()) {
                     response.status(404);

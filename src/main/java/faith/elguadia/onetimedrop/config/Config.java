@@ -48,7 +48,7 @@ public class Config {
             config.keySet().forEach((String key) -> config.putIfAbsent(key, ""));
 
             JdbcUrl = (String) creds.getOrDefault("JdbcUrl","");
-
+            directory = (String) config.getOrDefault("directory","");
         } catch (IOException e) {
             throw new RuntimeException("Failed to read config file.",e);
         } catch (YAMLException | ClassCastException e) {

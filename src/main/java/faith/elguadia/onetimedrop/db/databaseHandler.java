@@ -10,13 +10,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 
 public class databaseHandler {
+    // Maybe rewrite this.
+    // Ifrit "Well. I think Chroma is not going to rewrite this."
+    // Chroma "What, no, I'll in near future"
+
+
+
     private final HikariDataSource ds;
     private static final Logger logger = LoggerFactory.getLogger(databaseHandler.class);
     public databaseHandler() {
@@ -35,10 +40,9 @@ public class databaseHandler {
                             "filename VARCHAR(255) NOT NULL," +
                             "filehash VARCHAR(255) NOT NULL," +
                             "filelength INTEGER NOT NULL," +
-                            "filefinger VARCHAR(16) NOT NULL," +
+                            "filefinger VARCHAR(16) NOT NULL" +
                             //"filecompmethod VARCHAR(16) NOT NULL," +
-                            "created TIMESTAMP," +
-                            "modified TIMESTAMP" +
+                            //"created TIMESTAMP" +
                             ")"
             );
             ps.execute();
@@ -57,7 +61,7 @@ public class databaseHandler {
             ps.setString(2,hash);
             ps.setInt(3,filelength);
             ps.setString(4,finger);
-
+            //ps.setDate(5,new java.sql.Date(new Date().getTime()),);
             ps.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,5 +91,17 @@ public class databaseHandler {
         }
         logger.info(String.format("Select fileID:%s",fileId));
         return d;
+    }
+
+    public List<String> getFileListFromDate() {
+        List<String> filelist = new ArrayList<>();
+        try(Connection con = ds.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT filefinger FROM onetimedrop WHERE "
+            );
+        } catch (SQLException e) {
+
+        }
+        return filelist;
     }
 }
