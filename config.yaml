@@ -1,3 +1,4 @@
 test: 1
 defaultCompresstionAlgo: "LZO"
 directory: "upl/"
+thresholdTime: 600

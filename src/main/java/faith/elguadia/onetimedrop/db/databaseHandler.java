@@ -6,10 +6,7 @@ import faith.elguadia.onetimedrop.start;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,9 +37,9 @@ public class databaseHandler {
                             "filename VARCHAR(255) NOT NULL," +
                             "filehash VARCHAR(255) NOT NULL," +
                             "filelength INTEGER NOT NULL," +
-                            "filefinger VARCHAR(16) NOT NULL" +
+                            "filefinger VARCHAR(16) NOT NULL," +
                             //"filecompmethod VARCHAR(16) NOT NULL," +
-                            //"created TIMESTAMP" +
+                            "created TIMESTAMP" +
                             ")"
             );
             ps.execute();
@@ -55,12 +52,13 @@ public class databaseHandler {
         String finger = RandomStringUtils.random(16,0,0,true,true,null, ThreadLocalRandom.current());
         try(Connection con = ds.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO onetimedrop (filename,filehash,filelength,filefinger) VALUES (?,?,?,?)"
+                    "INSERT INTO onetimedrop (filename,filehash,filelength,filefinger,created) VALUES (?,?,?,?,?)"
             );
             ps.setString(1,filename);
             ps.setString(2,hash);
             ps.setInt(3,filelength);
             ps.setString(4,finger);
+            ps.setTimestamp(5,new Timestamp(System.currentTimeMillis()));
             //ps.setDate(5,new java.sql.Date(new Date().getTime()),);
             ps.execute();
         } catch (SQLException e) {
@@ -84,6 +82,7 @@ public class databaseHandler {
                 d.put("filehash", rs.getString("filehash"));
                 d.put("filelength", rs.getString("filelength"));
                 d.put("filefinger", rs.getString("filefinger"));
+                d.put("created",rs.getTimestamp("created").toString());
                 //d.put("filecompmethod", rs.getString("filecompmethod"));
             }
         } catch (SQLException e) {
@@ -93,15 +92,33 @@ public class databaseHandler {
         return d;
     }
 
-    public List<String> getFileListFromDate() {
+    public List<String> getFileListFromTime(long time) {
         List<String> filelist = new ArrayList<>();
         try(Connection con = ds.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
-                    "SELECT filefinger FROM onetimedrop WHERE "
+                    "SELECT filefinger FROM onetimedrop WHERE created<=?"
             );
+            ps.setTimestamp(1,new Timestamp(time));
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                filelist.add(rs.getString("filefinger"));
+            }
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
         return filelist;
     }
+
+    public void deleteEntry(String finger) {
+        try (Connection con = ds.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "DELETE FROM ONLY onetimedrop WHERE filefinger=?"
+            );
+            ps.setString(1,finger);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

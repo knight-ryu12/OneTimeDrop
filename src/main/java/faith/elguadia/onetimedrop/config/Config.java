@@ -14,6 +14,7 @@ public class Config {
 
     private String JdbcUrl;
     private String directory;
+    private int time;
     public static final Config CONFIG;
 
     static {
@@ -49,6 +50,7 @@ public class Config {
 
             JdbcUrl = (String) creds.getOrDefault("JdbcUrl","");
             directory = (String) config.getOrDefault("directory","");
+            time = (int) config.getOrDefault("thresholdTime",600);
         } catch (IOException e) {
             throw new RuntimeException("Failed to read config file.",e);
         } catch (YAMLException | ClassCastException e) {
@@ -80,4 +82,5 @@ public class Config {
     public String getDirectory() {
         return directory;
     }
+    public int getTime() {return time;}
 }
